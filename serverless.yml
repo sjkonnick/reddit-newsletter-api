@@ -6,6 +6,8 @@ provider:
   region: us-east-2
   environment:
     DYNAMODB_NAMESPACE: ${opt:stage, "dev"}
+    GMAIL_USER: ${file(env.yml):${self:provider.stage}.GMAIL_USER}
+    GMAIL_PASS: ${file(env.yml):${self:provider.stage}.GMAIL_PASS}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -44,6 +46,20 @@ functions:
     events:
       - http:
           method: GET
+          path: /api/users/{email}
+          cors: true
+          request:
+            parameters:
+              paths:
+                email: true
+
+  ## Email API
+  sendEmail:
+    handler: src/Email.sendEmail
+    events:
+      - schedule: rate(1 hour)
+      - http:
+          method: POST
           path: /api/users/{email}
           cors: true
           request:

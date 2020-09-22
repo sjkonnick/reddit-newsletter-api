@@ -71,7 +71,7 @@ module.exports = {
 
     const updatedUser = {};
     if (user.username) {
-      updatedUser.email = user.email;
+      updatedUser.username = user.username;
     }
     if (user.email) {
       updatedUser.email = user.email;
@@ -129,7 +129,8 @@ module.exports = {
     } else {
       return Util.envelop('User must have favorite subreddits', 422);
     }
-  }
+  },
+  getUserByEmail,
 };
 
 function getUserByEmail(aEmail) {
